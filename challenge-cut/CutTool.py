@@ -14,7 +14,7 @@ def cut_tool(file_path):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python simple_cut.py <file_path>")
+        print("Usage: python ")
         sys.exit(1)
     
     file_path = sys.argv[1]
