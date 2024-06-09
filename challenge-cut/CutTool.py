@@ -1,21 +1,25 @@
-import sys
+import argparse
 
-def cut_tool(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            for line in file:
-                fields = line.strip().split('\t')
-                if len(fields) >= 2:
-                    print(fields[1])
-                else:
-                    print("Field number exceeds available fields in line:", line.strip())
-    except IOError as e:
-        print("Error reading file:", e)
+def cut(file_path, delimiter, fields):
+    with open(file_path, 'r') as file:
+        for line in file:
+            parts = line.strip().split(delimiter)
+            output_parts = [parts[field - 1] for field in fields]
+            print(delimiter.join(output_parts))
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python ")
-        sys.exit(1)
-    
-    file_path = sys.argv[1]
-    cut_tool(file_path)
+    parser = argparse.ArgumentParser(description="Python implementation of the cut command")
+    parser.add_argument("file", help="Path to the file to process")
+    parser.add_argument("-d", "--delimiter", default="\t", help="Field delimiter (default is tab)")
+    parser.add_argument("-f", "--fields", required=True, type=lambda s: [int(field) for field in s.split(",")],
+    help="Fields to cut, separated by comma (e.g., -f 1,3,5)")    
+    args = parser.parse_args()
+   
+    # fields = [int(field) for field in args.fields.replace(',', ' ').split()]
+
+
+    if args.fields is None:
+        print("Error: You must specify at least one field with -f option")
+    else:
+        print(args)
+        cut(args.file, args.delimiter, args.fields)
